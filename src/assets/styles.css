@@ -8,7 +8,7 @@
   border-bottom: 1px solid #eee;
 }
 /*body{ background: rgb(22, 22, 22) !important;
- 
+
 }*/
 
 .active{
@@ -72,7 +72,7 @@
 	padding:25px;
 	border-radius: 5px;
   text-align: center;
-  
+
 }
 
 .user-image-for-edit img{
@@ -96,7 +96,7 @@
 
 .item-user .image-user img,
 .item-publication .image-user img{
-width: 120px;
+width: 100%;
 }
 
 .item-user .user-name,
@@ -113,7 +113,7 @@ width: 120px;
   font-weight: bold;
 }
 .avatar-default{
-  width: 100% !important; 
+  width: 100% !important;
 }
 
 /*Sidebar*/
@@ -124,7 +124,7 @@ width: 120px;
 }
 
 #user-card, #new-publication{
-  
+
   padding: 25px;
   width: 32%;
 }
@@ -132,7 +132,7 @@ width: 120px;
 #new-publication{
   padding: 18px;
   padding-left: 8px;
-  
+
 }
 
 #user-card .avatar{
@@ -207,9 +207,9 @@ width: 120px;
 
 /*Timeline*/
 #publications{
-  
+
   min-height: 500px;
-  
+
 }
 #publications .date{
   color: grey;
@@ -220,7 +220,7 @@ width: 120px;
 /*perfiles*/
 #data-profile{
   min-height: 500px;
-  
+
 }
 
 #data-profile .avatar{
@@ -231,7 +231,7 @@ width: 120px;
   margin-right: 15px;
 }
 #data-profile .avatar img{
-  width: 100% 
+  width: 100%
 }
 
 #data-profile .user-name{
@@ -269,4 +269,55 @@ width: 120px;
 
 #data-profile .publications{
 	margin-top: 40px;
+}
+
+.mb-0{
+  margin-bottom: 0px!important;
+}
+.mb-20{
+  margin-bottom: 20px!important;
+}
+.mt-10{
+  margin-top: 10px;
+}
+.mb-10{
+  margin-bottom: 10px;
+}
+.ml-10{
+  margin-left: 10px;
+}
+.flex-item-end{
+  display: flex;
+  justify-content: flex-end
+}
+.paddingY-5{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#comment-bar{
+  box-shadow: -10px 0px 13px -7px #b2b8b4, 10px 0px 13px -7px #b2b8b4, -6px -1px 3px 11px rgba(0,0,0,0);
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+}
+#comment-bar::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: #F5F5F5;
+}
+
+#comment-bar::-webkit-scrollbar
+{
+  width: 10px;
+  background-color: #F5F5F5;
+}
+
+#comment-bar::-webkit-scrollbar-thumb
+{
+  background-color: #0ae;
+
+  background-image: -webkit-gradient(linear, 0 0, 0 100%,
+  color-stop(.5, rgba(255, 255, 255, .2)),
+  color-stop(.5, transparent), to(transparent));
 }

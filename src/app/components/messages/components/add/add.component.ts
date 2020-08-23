@@ -32,14 +32,11 @@ export class AddComponent implements OnInit{
         private _userService: UserService
     ){
         this.title = 'Enviar Mensaje';
-        
+
         this.identity = this._userService.getIdentity();
         this.token = this._userService.getToken();
         this.url = GLOBAL.url;
         this.message = new Message('','','','',this.identity._id,'');
-
-
-        
     }
     ngOnInit(){
         console.log('add.component cargado');

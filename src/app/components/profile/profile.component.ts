@@ -5,8 +5,6 @@ import { Follow } from '../../models/follow';
 import { UserService } from '../../services/user.service';
 import { FollowService } from '../../services/follow.service';
 import { GLOBAL } from '../../services/global';
-import { Title } from '@angular/platform-browser';
-import { Url } from 'url';
 
 @Component({
     selector: 'profile',
@@ -89,7 +87,7 @@ export class ProfileComponent implements OnInit {
             }
         );
     }
-    
+
     followUser(followed){
         var follow = new Follow('',this.identity._id,followed);
 

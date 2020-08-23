@@ -1,0 +1,132 @@
+<div class="col-lg-8">
+  <h1 class="h1-strong">{{title}}</h1>
+
+  <button class="btn btn-default btn-sm" (click)="refresh($event)">Ver nuevas</button>
+  <div id="publications">
+    <div class="item-publication">
+      <div class="panel panel-default mb-0">
+        <div class="panel-body">
+
+          <div class="image-user pull-left">
+              <img *ngIf="owner.image" src="{{ url +'get-image-user/' + owner.image }}" />
+              <img src="assets/user.png" class="avatar-default" *ngIf="!owner.image"/>
+          </div>
+
+          <div>
+            <a [routerLink]="['/perfil',publication.user]" class="user-name">
+              {{owner.name + ' ' +owner.surname}}
+            </a>
+            &nbsp; | &nbsp;
+            <span class="date">
+                       {{(publication.created_at | amFromUnix) | amLocale: 'es' | amTimeAgo}}
+                       </span>
+          </div>
+
+          <h4 class="publication-text pull-left">
+            {{publication.text}}
+          </h4>
+
+          <!-- Mostrar las fotos-->
+          <div class="col-lg-12" >
+            <img src="{{ url +  'get-image-pub/' + publication.file}}" class="col-lg-8"/>
+            <br/>
+          </div>
+        </div>
+      </div>
+
+      <!--      comment content-->
+      <div class="paddingY-5" *ngIf="commentFlag"><textarea class="form-control" [(ngModel)]="comment" rows="3"></textarea></div>
+      <!--      display comment button -->
+      <div class="flex-item-end mb-20">
+        <button type="button" class="btn btn-sm btn-primary" (click)="commentFlag=!commentFlag" *ngIf="!commentFlag">
+          deje un comentario
+        </button>
+        <!--      if comment button click, then this will show save and cancel button -->
+        <div *ngIf="commentFlag">
+          <button type="button" style="margin-right: 10px" class="btn btn-sm btn-danger" (click)="commentFlag=!commentFlag">
+            cancelar
+          </button>
+          <button type="button" class="btn btn-sm btn-success" (click)="addComment()">
+            salvar
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-lg-4">
+  <h3>All comments</h3>
+  <div style="max-height: 100vh;height: 100%; overflow: auto;" id="comment-bar">
+    <div class="panel panel-default item-publication mt-10 mb-10">
+      <!--    user avatar-->
+      <div class="image-user pull-left mt-10 ml-10">
+        <img *ngIf="owner.image" src="{{ url +'get-image-user/' + owner.image }}" />
+        <img src="assets/user.png" class="avatar-default" *ngIf="!owner.image"/>
+      </div>
+      <!-- user's name-->
+      <div class="mt-10">
+        <a [routerLink]="['/perfil',publication.user]" class="user-name">
+          {{owner.name + ' ' +owner.surname}}
+        </a>
+        &nbsp; | &nbsp;
+        <span class="date">
+                       {{(publication.created_at | amFromUnix) | amLocale: 'es' | amTimeAgo}}
+                       </span>
+      </div>
+
+
+      <div class="panel-body">
+        Hello this iasdfas comment 1 from seasdfnior full stack sdfasdwebasdf developer. adsf asdafsdfasdffwasdfasdfasefa sdfasdasdffas dfw efasdfa dsf
+      </div>
+    </div>
+    <div class="panel panel-default item-publication mt-10 mb-10">
+      <!--    user avatar-->
+      <div class="image-user pull-left mt-10 ml-10">
+        <img *ngIf="owner.image" src="{{ url +'get-image-user/' + owner.image }}" />
+        <img src="assets/user.png" class="avatar-default" *ngIf="!owner.image"/>
+      </div>
+      <!-- user's name-->
+      <div class="mt-10">
+        <a [routerLink]="['/perfil',publication.user]" class="user-name">
+          {{owner.name + ' ' +owner.surname}}
+        </a>
+        &nbsp; | &nbsp;
+        <span class="date">
+                       {{(publication.created_at | amFromUnix) | amLocale: 'es' | amTimeAgo}}
+                       </span>
+      </div>
+
+
+      <div class="panel-body">
+        Hello this iasdfas comment 1 from seasdfnior full stack sdfasdwebasdf developer. adsf asdafsdfasdffwasdfasdfasefa sdfasdasdffas dfw efasdfa dsf
+      </div>
+    </div>
+    <div class="panel panel-default item-publication mt-10 mb-10">
+      <!--    user avatar-->
+      <div class="image-user pull-left mt-10 ml-10">
+        <img *ngIf="owner.image" src="{{ url +'get-image-user/' + owner.image }}" />
+        <img src="assets/user.png" class="avatar-default" *ngIf="!owner.image"/>
+      </div>
+      <!-- user's name-->
+      <div class="mt-10">
+        <a [routerLink]="['/perfil',publication.user]" class="user-name">
+          {{owner.name + ' ' +owner.surname}}
+        </a>
+        &nbsp; | &nbsp;
+        <span class="date">
+                       {{(publication.created_at | amFromUnix) | amLocale: 'es' | amTimeAgo}}
+                       </span>
+      </div>
+
+
+      <div class="panel-body">
+        Hello this iasdfas comment 1 from seasdfnior full stack sdfasdwebasdf developer. adsf asdafsdfasdffwasdfasdfasefa sdfasdasdffas dfw efasdfa dsf
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="clearfix"></div>

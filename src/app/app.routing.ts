@@ -10,6 +10,7 @@ import { UsersComponent } from './components/users/users.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { FollowingComponent } from './components/following/following.component';
+import {PublicationdetailComponent} from "./components/publicationdetail/publicationdetail.component";
 
 import { UserGuard } from './services/user.guard';
 
@@ -23,9 +24,9 @@ const appRoutes: Routes = [
   {path: 'gente/:page', component: UsersComponent, canActivate:[UserGuard]},
   {path: 'timeline', component: TimelineComponent, canActivate:[UserGuard]},
   {path: 'perfil/:id', component: ProfileComponent, canActivate:[UserGuard]},
+  {path: 'publicationdetail/:id', component: PublicationdetailComponent, canActivate:[UserGuard]},
   {path: 'siguiendo/:id', component: FollowingComponent, canActivate:[UserGuard]},
   {path: '**', component: HomeComponent},
-  
   ];
 
 export const appRoutingProviders: any[] = [];
