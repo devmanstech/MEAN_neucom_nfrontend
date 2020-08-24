@@ -4,7 +4,6 @@ import { Publication } from '../../models/publication';
 import { GLOBAL } from '../../services/global';
 import { UserService } from '../../services/user.service';
 import {PublicationService} from '../../services/publication.service';
-//import { $ } from 'protractor';
 import * as $ from 'jquery';
 
 @Component({
@@ -24,7 +23,7 @@ export class PublicationsComponent implements OnInit{
     public itemsPerPage;
     public publications: Publication[];
     @Input() user: string;
-    
+
 
     constructor(
         private _route: ActivatedRoute,

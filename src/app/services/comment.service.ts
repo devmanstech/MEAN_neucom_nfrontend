@@ -7,6 +7,7 @@ import {GLOBAL} from './global';
 
 export class CommentService {
   public url: string;
+
   constructor(private _http: HttpClient) {
     this.url = GLOBAL.url;
   }
@@ -15,9 +16,13 @@ export class CommentService {
     let params = JSON.stringify(Comment);
     let headers = new HttpHeaders().set('Content-Type', 'application/json')
       .set('Authorization', token);
-    console.log("Okay!",Comment);
-    return ;
-    // return this._http.post(this.url + 'publication', params, {headers: headers});
+    return this._http.post(this.url + 'comment', params, {headers: headers});
+  }
+  getComments(token,publication):Observable<any>{
+    let params = JSON.stringify(publication);
+    console.log(params)
+    let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', token);
+    return this._http.post(this.url + 'get-comments', params, {headers: headers});
   }
 }
 
