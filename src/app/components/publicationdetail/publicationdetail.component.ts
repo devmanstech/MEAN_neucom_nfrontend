@@ -17,18 +17,16 @@ export class PublicationdetailComponent implements OnInit {
   public token;
   public title: string;
   public url: string;
-  public status: string;
-  public page;
-  public total;
-  public pages;
   public publication;
   public publication_id: string;
   public commentFlag:boolean =false;
-  public commentButtonShowFlag:boolean=false;
+  public commentButtonShowFlag;
   public comment:string;
   public commentObjects:[];
   public success;
   public message : string;
+  public updateFlag:boolean;
+  public updateCommentID;
   constructor(
     private _route: ActivatedRoute,
     private _userService: UserService,
@@ -43,11 +41,9 @@ export class PublicationdetailComponent implements OnInit {
     const id = this._route.snapshot.paramMap.get('id');
     this.publication_id = id;
     this.getPublication(this.publication_id);
-    this.getComments();
     this.title = 'Publicaciones detalle';
     this.url=GLOBAL.url;
     this.commentFlag=false;
-
     this.token = this._userService.getToken();
   }
 
@@ -55,7 +51,14 @@ export class PublicationdetailComponent implements OnInit {
   getPublication(publication_id) {
     this._publicationService.getPublication(this.token, publication_id).subscribe(
       response => {
+        console.log("get publication response",response)
+        if (response.success==false){
+          this.success = false;
+          this.message = response.message;
+        }
         this.publication = response;
+        console.log("1")
+        this.getComments()
       }
     );
   }
@@ -73,6 +76,9 @@ export class PublicationdetailComponent implements OnInit {
   //No mostraré el botón dejar comentario.
   //tampoco puedo dejar comentarios sobre mi publicación
   checkCommentButtonShowFlag(commentObjects){
+    // this.commentButtonShowFlag=true;
+    // return;
+    console.log("checking comment button show flag",this.publication)
     if (this.publication){
       if (this.publication.user._id==this.identity._id) {
         console.log("same1?")
@@ -81,12 +87,14 @@ export class PublicationdetailComponent implements OnInit {
       }
       else{
         for (let i in commentObjects){
-          console.log("same2?")
-          commentObjects[i].emitter._id==this.identity._id
-          this.commentButtonShowFlag=false;
-          return;
+          if(commentObjects[i].emitter._id==this.identity._id){
+            console.log("same2?")
+            this.commentButtonShowFlag=false;
+            return;
+          }
         }
       }
+      console.log("No same?")
       this.commentButtonShowFlag=true;
     }
   }
@@ -106,6 +114,52 @@ export class PublicationdetailComponent implements OnInit {
         this.message = response.message;
         setTimeout(()=>{
           this.success=null;
+          this.message='';
+        },1500)
+        this.getComments();
+      }
+    );
+  }
+  handleEditCommentButtonClick(id,comment){
+    this.comment = comment
+    this.updateFlag=true;
+    this.success=null;
+    this.commentFlag=true;
+    this.updateCommentID = id
+    $("html, body").animate({scrollTop: $('body').prop("scrollHeight")}, 500);
+  }
+  updateComment(){
+    this._commentService.updateComment(this.token,{_id:this.updateCommentID,comment:this.comment}).subscribe(
+      response => {
+        // guardar el comentario es un error o un éxito?
+        this.success = response.success;
+        // guardar el comentario es un error o un éxito?
+        this.message = response.message;
+        this.commentFlag=false;
+
+        setTimeout(()=>{
+          this.updateCommentID = null
+          this.success=null;
+          this.updateFlag=false;
+        },1500)
+
+        this.getComments();
+      }
+    );
+  }
+
+  deleteComment(id){
+    $("html, body").animate({scrollTop: $('body').prop("scrollHeight")}, 500);
+    console.log("this is id",id)
+    this._commentService.deleteComment(this.token,id).subscribe(
+      response => {
+        // guardar el comentario es un error o un éxito?
+        this.success = response.success;
+        // guardar el comentario es un error o un éxito?
+        this.message = response.message;
+
+        setTimeout(()=>{
+          this.success=null;
         },1500)
         this.getComments();
       }
@@ -114,6 +168,6 @@ export class PublicationdetailComponent implements OnInit {
   //si hago clic en el botón comentar, mostraré la entrada del área de texto y el botón guardar y cancelar
   commentButtonClick(){
     $("html, body").animate({scrollTop: $('body').prop("scrollHeight")}, 500);
-    this.commentFlag=!this.commentFlag;
+    this.commentFlag=true;
   }
 }

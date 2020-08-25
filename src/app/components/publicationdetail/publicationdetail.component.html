@@ -1,7 +1,7 @@
 <div class="col-lg-8">
-  <div *ngIf="!publication">Loading...</div>
-  <div *ngIf="publication">
-<!--    para mostrar el título  Publicaciones detalle-->
+  <div *ngIf="!publication||commentButtonShowFlag==null">Loading...</div>
+  <div *ngIf="publication&&commentButtonShowFlag!=null">
+    <!--    para mostrar el título  Publicaciones detalle-->
     <h1 class="h1-strong">{{title}}</h1>
 
     <div id="publications" style="margin-bottom: 20px">
@@ -36,31 +36,39 @@
           </div>
         </div>
 
-        <span *ngIf="commentButtonShowFlag">
+        <div *ngIf="success!=null">
+          <div class="alert alert-success" role="alert" *ngIf="success==true" style="margin-bottom: 0px">{{message}}</div>
+          <div class="alert alert-danger" role="alert" *ngIf="success==false" style="margin-bottom: 0px">{{message}}</div>
+        </div>
         <!--      comment content-->
-        <div class="paddingY-5" *ngIf="commentFlag"><textarea autofocus class="form-control" [(ngModel)]="comment"
-                                                              rows="3"></textarea></div>
-          <div *ngIf="success!=null">
-            <div class="alert alert-success" role="alert" *ngIf="success==true">{{message}}</div>
-            <div class="alert alert-danger" role="alert" *ngIf="success==false">{{message}}</div>
-          </div>
-          <!--      display comment button -->
-        <div class="flex-item-end mb-20">
-          <button type="button" class="btn btn-sm btn-primary" (click)="commentButtonClick()" *ngIf="!commentFlag">
-            deje un comentario
-          </button>
-          <!--      if comment button click, then this will show save and cancel button -->
-          <div *ngIf="commentFlag">
+        <div class="paddingY-5" *ngIf="commentFlag">
+          <textarea autofocus class="form-control" [(ngModel)]="comment" rows="3"></textarea>
+        </div>
+
+        <div class="flex-item-end mb-20" *ngIf="commentFlag">
             <button type="button" style="margin-right: 10px" class="btn btn-sm btn-danger"
-                    (click)="commentFlag=!commentFlag">
+                    (click)="commentFlag=false">
               cancelar
             </button>
-            <button type="button" class="btn btn-sm btn-success" (click)="addComment()">
-              salvar
+            <span *ngIf="!updateFlag">
+                  <button type="button" class="btn btn-sm btn-success" (click)="addComment()">
+                    salvar
+                </button>
+                </span>
+            <span *ngIf="updateFlag">
+                  <button type="button" class="btn btn-sm btn-success" (click)="updateComment()">
+                    update
+                </button>
+                </span>
+        </div>
+        <!--      if comment button click, then this will show save and cancel button -->
+        <span *ngIf="commentButtonShowFlag">
+          <!--      display comment button -->
+          <div class="flex-item-end mb-20">
+            <button type="button" class="btn btn-sm btn-primary" (click)="commentButtonClick()" *ngIf="!commentFlag&&!updateFlag">
+              deje un comentario
             </button>
           </div>
-
-        </div>
         </span>
       </div>
     </div>
@@ -70,34 +78,57 @@
 <div class="col-lg-4">
   <h3>Todas comentarios</h3>
 
-<!--  Si hago clic en el botón Actualizar, volveré a recibir comentarios.-->
-  <button class="form-control mb-10" (click)="getComments()"><i class="fa fa-refresh" style="margin-right: 10px"></i>Actualizar</button>
-<!--si esta publicación tiene tantos comentarios, mostraré la barra de desplazamiento.-->
+  <!--  Si hago clic en el botón Actualizar, volveré a recibir comentarios.-->
+  <button class="form-control mb-10" (click)="getComments()"><i class="fa fa-refresh" style="margin-right: 10px"></i>Actualizar
+  </button>
+  <!--si esta publicación tiene tantos comentarios, mostraré la barra de desplazamiento.-->
   <div style="max-height: calc(100vh - 100px);height: 100%; overflow: auto; margin-bottom: 20px;" id="comment-bar">
-    <div class="flex-item-center" style="height: 150px" *ngIf="commentObjects.length==0"><span style="margin:auto">No Comments</span></div>
+    <div *ngIf="!commentObjects"><span style="margin:auto">Loading comments...</span></div>
+    <div *ngIf="commentObjects">
+      <div class="flex-item-center" style="height: 150px" *ngIf="commentObjects.length==0">
+        <span style="margin:auto">No Comments</span>
+      </div>
 
-    <span *ngIf="commentObjects.length>0">
-      <div class="panel panel-default item-publication mt-10 mb-10" *ngFor="let commentObject of commentObjects">
-      <!--    avatar de usuario-->
-      <div class="image-user pull-left mt-10 ml-10">
-        <img *ngIf="commentObject.emitter.image" src="{{ url +'get-image-user/' + commentObject.emitter.image }}"/>
-        <img src="assets/user.png" class="avatar-default" *ngIf="!commentObject.emitter.image"/>
+      <div *ngIf="commentObjects.length>0" >
+        <div *ngFor="let commentObject of commentObjects" >
+          <div class="panel panel-default item-publication mt-10 mb-10" >
+            <!--    avatar de usuario-->
+            <div class="image-user pull-left mt-10 ml-10">
+              <a [routerLink]="['/perfil',commentObject.emitter._id]">
+                <img *ngIf="commentObject.emitter.image" src="{{ url +'get-image-user/' + commentObject.emitter.image }}"/>
+                <img src="assets/user.png" class="avatar-default" *ngIf="!commentObject.emitter.image"/>
+              </a>
+            </div>
+            <!-- nombre de usuario-->
+            <div class="mt-10">
+              <a [routerLink]="['/perfil',commentObject.emitter._id]" class="user-name">
+                {{commentObject.emitter.name + ' ' + commentObject.emitter.surname}}
+              </a>
+              &nbsp; | &nbsp;
+              <span class="date">{{(commentObject.created_at | amFromUnix) | amLocale: 'es' | amTimeAgo}}</span>
+            </div>
+            <!--        contenido del comentario    -->
+            <div class="panel-body">
+              {{commentObject.comment}}
+            </div>
+          </div>
+          <div class="flex-item-end mt-10 mb-10" *ngIf="commentObject.emitter._id==identity._id">
+            <div>
+              <button class="btn btn-success"
+                      (click)="handleEditCommentButtonClick(commentObject._id,commentObject.comment)">
+                <span class="glyphicon glyphicon-edit"></span>
+              </button>
+
+              <button class="btn btn-danger ml-10" (click)="deleteComment(commentObject._id)">
+                <span class="glyphicon glyphicon-trash"></span>
+              </button>
+            </div>
+
+          </div>
+        </div>
       </div>
-        <!-- nombre de usuario-->
-      <div class="mt-10">
-        <a [routerLink]="['/perfil',commentObject.emitter]" class="user-name">
-          {{commentObject.emitter.name + ' ' + commentObject.emitter.surname}}
-        </a>
-        &nbsp; | &nbsp;
-        <span class="date">{{(commentObject.created_at | amFromUnix) | amLocale: 'es' | amTimeAgo}}</span>
-      </div>
-      <!--        contenido del comentario    -->
-      <div class="panel-body">
-        {{commentObject.comment}}
-      </div>
+
     </div>
-    </span>
-
   </div>
 
 </div>
